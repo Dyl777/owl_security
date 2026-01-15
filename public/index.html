@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Cleanup & Monitoring</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>System Cleanup & Monitoring Tool</h1>
+        <nav>
+            <a href="#dashboard">Dashboard</a>
+            <a href="#repos">Repositories</a>
+            <a href="#logs">Logs</a>
+            <a href="#anomalies">Anomalies</a>
+            <a href="#settings">Settings</a>
+        </nav>
+    </header>
+    <main>
+        <section id="dashboard">
+            <h2>Dashboard</h2>
+            <div class="card">
+                <h3>Docker Status</h3>
+                <p>Containers: <span id="container-count">Loading...</span></p>
+                <button onclick="refreshDocker()">Refresh</button>
+                <button onclick="analyzeDocker()">Smart Analysis</button>
+                <div id="docker-analysis" style="display:none;">
+                    <p>Unused containers: <span id="unused-containers">0</span></p>
+                    <p>High memory: <span id="high-mem">0</span></p>
+                    <button onclick="cleanDocker()">Clean</button>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Build & Cache Cleanup</h3>
+                <select id="language-select">
+                    <option>Node.js</option>
+                    <option>Python</option>
+                    <option>Java</option>
+                    <option>Rust</option>
+                    <option>Go</option>
+                    <option>Flutter/Android/iOS</option>
+                </select>
+                <button onclick="scanCache()">Scan & Clean</button>
+                <div id="cache-results"></div>
+            </div>
+            <div class="card">
+                <h3>Secret & Credential Scanner</h3>
+                <button onclick="scanSecrets()">Scan for Secrets</button>
+                <div id="secret-results"></div>
+            </div>
+            <div class="card">
+                <h3>Git Repository Hygiene</h3>
+                <button onclick="cleanGit()">Clean Git Repos</button>
+                <div id="git-results"></div>
+            </div>
+        </section>
+        <section id="repos" style="display:none;">
+            <h2>Repositories</h2>
+            <ul id="repo-list">
+                <!-- Repos will be listed here -->
+            </ul>
+            <button onclick="addRepo()">Add Repository</button>
+        </section>
+        <section id="logs" style="display:none;">
+            <h2>Log Monitoring</h2>
+            <div>
+                <label for="logfile">Logfile Path:</label>
+                <input type="text" id="logfile" placeholder="C:\path\to\logfile.log">
+                <button onclick="monitorLog()">Monitor</button>
+            </div>
+            <div>
+                <label for="log-dir">Directory:</label>
+                <input type="text" id="log-dir" placeholder="C:\logs">
+                <button onclick="scanLogs()">Scan Directory</button>
+            </div>
+            <div id="log-content">
+                <!-- Log content here -->
+            </div>
+            <div id="grouped-logs">
+                <!-- Grouped logs by first 15 chars -->
+            </div>
+        </section>
+        <section id="anomalies" style="display:none;">
+            <h2>Anomaly Detection</h2>
+            <div id="anomaly-graphs">
+                <div class="graph-container">
+                    <h4>Unusual Commits</h4>
+                    <canvas id="commits-canvas" width="400" height="200"></canvas>
+                </div>
+                <div class="graph-container">
+                    <h4>Shutdown Anomalies</h4>
+                    <canvas id="shutdown-canvas" width="400" height="200"></canvas>
+                </div>
+                <!-- More graphs -->
+            </div>
+            <button onclick="addGraph()">Add New Graph</button>
+        </section>
+        <section id="settings" style="display:none;">
+            <h2>Settings</h2>
+            <div class="card">
+                <h3>Security Checkthrough</h3>
+                <form id="security-form">
+                    <label for="repo-select">Select Repo:</label>
+                    <select id="repo-select"></select>
+                    <label for="api-key">API Key:</label>
+                    <input type="password" id="api-key">
+                    <button type="submit">Activate Swarm</button>
+                </form>
+            </div>
+            <div class="card">
+                <h3>Backup & Safety</h3>
+                <label><input type="checkbox" id="dry-run"> Dry-run mode</label>
+                <button onclick="createSnapshot()">Create Snapshot</button>
+                <button onclick="restoreSnapshot()">Restore</button>
+                <textarea id="ignore-rules" placeholder=".gitignore style rules"></textarea>
+            </div>
+            <div class="card">
+                <h3>Scheduled Cleanup</h3>
+                <select id="schedule-type">
+                    <option>Weekly</option>
+                    <option>Monthly</option>
+                    <option>Before Shutdown</option>
+                </select>
+                <button onclick="scheduleCleanup()">Schedule</button>
+            </div>
+            <div class="card">
+                <h3>Cloud Backup</h3>
+                <select id="cloud-service">
+                    <option>Google Drive</option>
+                    <option>Dropbox</option>
+                    <option>OneDrive</option>
+                </select>
+                <label><input type="checkbox" id="incremental"> Incremental</label>
+                <input type="text" id="backup-folders" placeholder="Folders to backup">
+                <button onclick="bindCloud()">Bind</button>
+            </div>
+            <div class="card">
+                <h3>Windows Registry</h3>
+                <input type="text" id="registry-key" placeholder="Registry key">
+                <button onclick="scanRegistry()">Scan</button>
+            </div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

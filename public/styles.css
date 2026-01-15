@@ -1,0 +1,158 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background-color: #ffffff;
+    color: #24292e;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #f6f8fa;
+    border-bottom: 1px solid #e1e4e8;
+    padding: 16px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+nav {
+    margin-top: 8px;
+}
+
+nav a {
+    color: #0366d6;
+    text-decoration: none;
+    margin-right: 16px;
+    font-weight: 500;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+main {
+    padding: 20px;
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+h2 {
+    border-bottom: 1px solid #e1e4e8;
+    padding-bottom: 8px;
+    color: #24292e;
+}
+
+.card {
+    background-color: #f6f8fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+button {
+    background-color: #0366d6;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #0256cc;
+}
+
+input {
+    padding: 8px;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    margin-right: 8px;
+}
+
+select {
+    padding: 8px;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    margin-right: 8px;
+    background-color: white;
+}
+
+textarea {
+    padding: 8px;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    width: 100%;
+    height: 100px;
+    resize: vertical;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 8px;
+    border-bottom: 1px solid #e1e4e8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.graph-container {
+    margin-bottom: 20px;
+    padding: 16px;
+    background-color: #f6f8fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+}
+
+.graph-container h4 {
+    margin-top: 0;
+    color: #24292e;
+}
+
+#grouped-logs {
+    margin-top: 20px;
+}
+
+.group {
+    background-color: #f6f8fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.group h5 {
+    margin: 0 0 8px 0;
+    color: #0366d6;
+}
+
+label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#log-content {
+    background-color: #f6f8fa;
+    border: 1px solid #e1e4e8;
+    padding: 16px;
+    height: 300px;
+    overflow-y: scroll;
+    font-family: monospace;
+    white-space: pre-wrap;
+}
