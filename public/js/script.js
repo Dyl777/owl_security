@@ -34,7 +34,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    
+    // Landing page active nav highlighting
+    if (document.body.classList.contains('landing')) {
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const scrollY = window.pageYOffset;
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+
+                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                    document.querySelector(`nav a[href="#${sectionId}"]`)?.classList.add('active');
+                } else {
+                    document.querySelector(`nav a[href="#${sectionId}"]`)?.classList.remove('active');
+                }
+            });
+        });
+    }
 });
 
 function toggleNav() {
