@@ -108,6 +108,8 @@ li {
 .graph-container {
     margin-bottom: 20px;
     padding: 16px;
+    padding-bottom: 40px;
+    padding-left: 40px;
     background-color: #f6f8fa;
     border: 1px solid #e1e4e8;
     border-radius: 6px;
@@ -155,4 +157,20 @@ form {
     overflow-y: scroll;
     font-family: monospace;
     white-space: pre-wrap;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+}
+
+th, td {
+    border: 1px solid #e1e4e8;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f6f8fa;
 }

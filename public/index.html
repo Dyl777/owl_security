@@ -54,11 +54,16 @@
                 <button onclick="cleanGit()">Clean Git Repos</button>
                 <div id="git-results"></div>
             </div>
+            <div class="card">
+                <h3>Browser Caches</h3>
+                <button onclick="cleanBrowserCache()">Clean Browser Cache</button>
+                <div id="browser-results"></div>
+            </div>
         </section>
         <section id="repos" style="display:none;">
             <h2>Repositories</h2>
             <ul id="repo-list">
-                <!-- Repos will be listed here -->
+                
             </ul>
             <button onclick="addRepo()">Add Repository</button>
         </section>
@@ -75,10 +80,10 @@
                 <button onclick="scanLogs()">Scan Directory</button>
             </div>
             <div id="log-content">
-                <!-- Log content here -->
+                
             </div>
             <div id="grouped-logs">
-                <!-- Grouped logs by first 15 chars -->
+                
             </div>
         </section>
         <section id="anomalies" style="display:none;">
@@ -86,13 +91,36 @@
             <div id="anomaly-graphs">
                 <div class="graph-container">
                     <h4>Unusual Commits</h4>
-                    <canvas id="commits-canvas" width="400" height="200"></canvas>
+                    <canvas id="commits-canvas" width="400" height="200" style="border:1px solid #e1e4e8;"></canvas>
                 </div>
                 <div class="graph-container">
                     <h4>Shutdown Anomalies</h4>
-                    <canvas id="shutdown-canvas" width="400" height="200"></canvas>
+                    <canvas id="shutdown-canvas" width="400" height="200" style="border:1px solid #e1e4e8;"></canvas>
                 </div>
-                <!-- More graphs -->
+                <div class="graph-container">
+                    <h4>Charging Periods</h4>
+                    <canvas id="charging-canvas" width="400" height="200" style="border:1px solid #e1e4e8;"></canvas>
+                </div>
+                <div class="graph-container">
+                    <h4>Admin Mode Time</h4>
+                    <canvas id="admin-canvas" width="400" height="200" style="border:1px solid #e1e4e8;"></canvas>
+                </div>
+                <div class="graph-container">
+                    <h4>Kernel Processes</h4>
+                    <canvas id="kernel-canvas" width="400" height="200" style="border:1px solid #e1e4e8;"></canvas>
+                </div>
+                <div class="graph-container">
+                    <h4>Open Ports Anomalies</h4>
+                    <canvas id="ports-canvas" width="400" height="200" style="border:1px solid #e1e4e8;"></canvas>
+                </div>
+                <div class="graph-container">
+                    <h4>Disk Usage Derivative</h4>
+                    <canvas id="disk-canvas" width="400" height="200" style="border:1px solid #e1e4e8;"></canvas>
+                </div>
+                <div class="graph-container">
+                    <h4>Memory Usage Derivative</h4>
+                    <canvas id="memory-canvas" width="400" height="200" style="border:1px solid #e1e4e8;"></canvas>
+                </div>
             </div>
             <button onclick="addGraph()">Add New Graph</button>
         </section>
@@ -107,12 +135,14 @@
                     <input type="password" id="api-key">
                     <button type="submit">Activate Swarm</button>
                 </form>
+                <div id="security-status"></div>
             </div>
             <div class="card">
                 <h3>Backup & Safety</h3>
                 <label><input type="checkbox" id="dry-run"> Dry-run mode</label>
                 <button onclick="createSnapshot()">Create Snapshot</button>
                 <button onclick="restoreSnapshot()">Restore</button>
+                <div id="snapshots-list"></div>
                 <textarea id="ignore-rules" placeholder=".gitignore style rules"></textarea>
             </div>
             <div class="card">
@@ -123,6 +153,7 @@
                     <option>Before Shutdown</option>
                 </select>
                 <button onclick="scheduleCleanup()">Schedule</button>
+                <div id="scheduled-list"></div>
             </div>
             <div class="card">
                 <h3>Cloud Backup</h3>
@@ -134,11 +165,25 @@
                 <label><input type="checkbox" id="incremental"> Incremental</label>
                 <input type="text" id="backup-folders" placeholder="Folders to backup">
                 <button onclick="bindCloud()">Bind</button>
+                <div id="cloud-list"></div>
             </div>
             <div class="card">
                 <h3>Windows Registry</h3>
                 <input type="text" id="registry-key" placeholder="Registry key">
                 <button onclick="scanRegistry()">Scan</button>
+                <div id="registry-results"></div>
+            </div>
+            <div class="card">
+                <h3>macOS Plist Registry</h3>
+                <input type="text" id="macos-plist" placeholder="Plist file path">
+                <button onclick="scanMacOS()">Scan</button>
+                <div id="macos-results"></div>
+            </div>
+            <div class="card">
+                <h3>Linux Config Registry</h3>
+                <input type="text" id="linux-config" placeholder="Config file path">
+                <button onclick="scanLinux()">Scan</button>
+                <div id="linux-results"></div>
             </div>
         </section>
     </main>
