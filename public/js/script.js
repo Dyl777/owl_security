@@ -2,46 +2,39 @@
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('nav a').forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const target = e.target.getAttribute('href').substring(1);
-            document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
-            document.getElementById(target).style.display = 'block';
-            // Close mobile nav after click
-            document.getElementById('nav-menu').classList.remove('active');
+            const href = e.target.getAttribute('href');
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                const targetId = href.substring(1);
+                if (document.body.classList.contains('landing')) {
+                    
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                } else {
+                    
+                    document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
+                    document.getElementById(targetId).style.display = 'block';
+                }
+                
+                document.getElementById('nav-menu').classList.remove('active');
+            }
+            
         });
     });
-    document.getElementById('hamburger').addEventListener('click', toggleNav);
+    document.getElementById('hamburger')?.addEventListener('click', toggleNav);
 
     // Closing dropdown when clicking outside
     document.addEventListener('click', (e) => {
         const nav = document.getElementById('nav-menu');
         const hamburger = document.getElementById('hamburger');
-        if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
+        if (nav && !nav.contains(e.target) && hamburger && !hamburger.contains(e.target)) {
             nav.classList.remove('active');
         }
     });
 
-    // Form listeners
-    document.getElementById('login-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        alert(`Logged in as ${username}`);
-        // Switch to dashboard
-        document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
-        document.getElementById('dashboard').style.display = 'block';
-    });
-
-    document.getElementById('register-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const username = document.getElementById('reg-username').value;
-        const email = document.getElementById('reg-email').value;
-        const password = document.getElementById('reg-password').value;
-        alert(`Registered ${username} with ${email}`);
-        
-        document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
-        document.getElementById('login').style.display = 'block';
-    });
+    
 });
 
 function toggleNav() {
@@ -239,7 +232,7 @@ function updateRepoSelect() {
     });
 }
 
-document.getElementById('security-form').addEventListener('submit', (e) => {
+document.getElementById('security-form')?.addEventListener('submit', (e) => {
     e.preventDefault();
     const repo = document.getElementById('repo-select').value;
     const key = document.getElementById('api-key').value;
@@ -309,20 +302,33 @@ function cleanGit() {
     `;
 }
 
-// Initial load
-updateRepoList();
-refreshDocker();
-drawGraph(document.getElementById('commits-canvas'), anomalyData.commits, "Days", "Commits");
-drawGraph(document.getElementById('shutdown-canvas'), anomalyData.shutdowns, "Days", "Shutdowns");
-drawGraph(document.getElementById('charging-canvas'), anomalyData.charging, "Days", "Hours");
-drawGraph(document.getElementById('admin-canvas'), anomalyData.admin, "Days", "Hours");
-drawGraph(document.getElementById('kernel-canvas'), anomalyData.kernel, "Days", "Processes");
-drawGraph(document.getElementById('ports-canvas'), anomalyData.ports, "Days", "Ports");
-drawGraph(document.getElementById('disk-canvas'), anomalyData.disk, "Days", "GB");
-drawGraph(document.getElementById('memory-canvas'), anomalyData.memory, "Days", "GB");
-updateSnapshots();
-updateScheduled();
-updateCloud();
+function cleanBrowserCache() {
+    const results = document.getElementById('browser-results');
+    results.innerHTML = `
+        <p>Browser Cache Cleaned:</p>
+        <ul>
+            <li>Cleared 150 MB of cached images and scripts</li>
+            <li>Removed 50 expired cookies</li>
+            <li>Deleted 20 MB of local storage data</li>
+        </ul>
+        <p>Cache cleared successfully. Refresh the page for optimal performance.</p>
+    `;
+}
+
+
+if (document.getElementById('repo-list')) updateRepoList();
+if (document.getElementById('container-count')) refreshDocker();
+if (document.getElementById('commits-canvas')) drawGraph(document.getElementById('commits-canvas'), anomalyData.commits, "Days", "Commits");
+if (document.getElementById('shutdown-canvas')) drawGraph(document.getElementById('shutdown-canvas'), anomalyData.shutdowns, "Days", "Shutdowns");
+if (document.getElementById('charging-canvas')) drawGraph(document.getElementById('charging-canvas'), anomalyData.charging, "Days", "Hours");
+if (document.getElementById('admin-canvas')) drawGraph(document.getElementById('admin-canvas'), anomalyData.admin, "Days", "Hours");
+if (document.getElementById('kernel-canvas')) drawGraph(document.getElementById('kernel-canvas'), anomalyData.kernel, "Days", "Processes");
+if (document.getElementById('ports-canvas')) drawGraph(document.getElementById('ports-canvas'), anomalyData.ports, "Days", "Ports");
+if (document.getElementById('disk-canvas')) drawGraph(document.getElementById('disk-canvas'), anomalyData.disk, "Days", "GB");
+if (document.getElementById('memory-canvas')) drawGraph(document.getElementById('memory-canvas'), anomalyData.memory, "Days", "GB");
+if (document.getElementById('snapshots-list')) updateSnapshots();
+if (document.getElementById('scheduled-list')) updateScheduled();
+if (document.getElementById('cloud-list')) updateCloud();
 
 function scanRegistry() {
     const key = document.getElementById('registry-key').value;

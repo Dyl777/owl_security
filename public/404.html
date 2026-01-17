@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - System Cleanup & Monitoring</title>
+    <title>404 - Page Not Found</title>
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        
+    </style>
 </head>
 <body>
     <header>
@@ -12,21 +15,16 @@
         <button id="hamburger" class="hamburger">☰</button>
         <nav id="nav-menu">
             <a href="index.html">Home</a>
+            <a href="login.html">Login</a>
             <a href="register.html">Register</a>
         </nav>
     </header>
     <main>
-        <section id="login">
-            <h2>Login</h2>
-            <div class="card">
-                <form id="login-form">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" required>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" required>
-                    <button type="submit">Login</button>
-                </form>
-            </div>
+        <section  style="text-align: center; padding: 40px;">
+            <h1>404</h1>
+            <img id="error_img" src="../img/illustration-of-an-owl-404-page-for-a-security--sa.svg" alt="404 Illustration" style="max-width: 100%; height: auto;">
+            <p>Page not found.</p>
+            <button onclick="window.location.href='index.html'">Go back to Home</button>
         </section>
     </main>
     <script src="js/script.js"></script>
