@@ -174,3 +174,93 @@ th, td {
 th {
     background-color: #f6f8fa;
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    header {
+        padding: 12px;
+    }
+
+    header h1 {
+        font-size: 20px;
+    }
+
+    nav {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav a {
+        margin: 5px 0;
+        padding: 8px;
+        width: 100%;
+        text-align: center;
+        border-radius: 6px;
+        background-color: #f6f8fa;
+    }
+
+    main {
+        padding: 10px;
+    }
+
+    .card {
+        padding: 12px;
+        margin-bottom: 20px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+
+    canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    .graph-container {
+        padding: 12px;
+        padding-bottom: 50px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 6px;
+    }
+
+    #log-content {
+        height: 200px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 18px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    .card h3 {
+        font-size: 16px;
+    }
+
+    button {
+        font-size: 14px;
+    }
+}
