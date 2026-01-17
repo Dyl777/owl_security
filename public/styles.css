@@ -10,6 +10,9 @@ header {
     background-color: #f6f8fa;
     border-bottom: 1px solid #e1e4e8;
     padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 header h1 {
@@ -17,8 +20,33 @@ header h1 {
     font-size: 24px;
 }
 
-nav {
-    margin-top: 8px;
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #0366d6;
+    margin-left: auto;
+}
+
+.logout-btn {
+    background-color: #d73a49;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 16px;
+}
+
+.logout-btn:hover {
+    background-color: #b31d28;
+}
+
+#nav-menu {
+    display: flex;
 }
 
 nav a {
@@ -185,19 +213,40 @@ th {
         font-size: 20px;
     }
 
-    nav {
-        display: flex;
+    .hamburger {
+        display: block;
+    }
+
+    #nav-menu {
+        display: none;
         flex-direction: column;
-        align-items: flex-start;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 200px;
+        background-color: #f6f8fa;
+        border: 1px solid #e1e4e8;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        z-index: 10;
+    }
+
+    #nav-menu.active {
+        display: flex;
     }
 
     nav a {
-        margin: 5px 0;
-        padding: 8px;
+        margin: 0;
+        padding: 12px;
         width: 100%;
-        text-align: center;
-        border-radius: 6px;
-        background-color: #f6f8fa;
+        text-align: left;
+        border-radius: 0;
+        background-color: #ffffff;
+        border-bottom: 1px solid #e1e4e8;
+    }
+
+    nav a:last-child {
+        border-bottom: none;
     }
 
     main {
@@ -210,7 +259,7 @@ th {
     }
 
     button {
-        width: 100%;
+        /*width: 100%;*/
         padding: 12px;
         font-size: 16px;
         margin-bottom: 8px;

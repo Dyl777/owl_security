@@ -9,13 +9,17 @@
 <body>
     <header>
         <h1>System Cleanup & Monitoring Tool</h1>
-        <nav>
+        <button id="hamburger" class="hamburger">☰</button>
+        <nav id="nav-menu">
             <a href="#dashboard">Dashboard</a>
             <a href="#repos">Repositories</a>
             <a href="#logs">Logs</a>
             <a href="#anomalies">Anomalies</a>
             <a href="#settings">Settings</a>
+            <!-- <a href="login.html">Login</a>
+            <a href="register.html">Register</a> -->
         </nav>
+        <button id="logout-btn" class="logout-btn" onclick="logout()">Logout</button>
     </header>
     <main>
         <section id="dashboard">

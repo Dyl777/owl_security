@@ -1,12 +1,53 @@
 // Navigations
-document.querySelectorAll('nav a').forEach(link => {
-    link.addEventListener('click', (e) => {
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('nav a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = e.target.getAttribute('href').substring(1);
+            document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
+            document.getElementById(target).style.display = 'block';
+            // Close mobile nav after click
+            document.getElementById('nav-menu').classList.remove('active');
+        });
+    });
+    document.getElementById('hamburger').addEventListener('click', toggleNav);
+
+    // Closing dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        const nav = document.getElementById('nav-menu');
+        const hamburger = document.getElementById('hamburger');
+        if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
+            nav.classList.remove('active');
+        }
+    });
+
+    // Form listeners
+    document.getElementById('login-form').addEventListener('submit', (e) => {
         e.preventDefault();
-        const target = e.target.getAttribute('href').substring(1);
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        alert(`Logged in as ${username}`);
+        // Switch to dashboard
         document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
-        document.getElementById(target).style.display = 'block';
+        document.getElementById('dashboard').style.display = 'block';
+    });
+
+    document.getElementById('register-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('reg-username').value;
+        const email = document.getElementById('reg-email').value;
+        const password = document.getElementById('reg-password').value;
+        alert(`Registered ${username} with ${email}`);
+        
+        document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
+        document.getElementById('login').style.display = 'block';
     });
 });
+
+function toggleNav() {
+    const nav = document.getElementById('nav-menu');
+    nav.classList.toggle('active');
+}
 
 // Dummy data for each table
 let repos = ['repo1', 'repo2', 'my-project', 'old-repo'];
@@ -309,7 +350,24 @@ function scanMacOS() {
     results.innerHTML = `<p>Plist entries for: ${plist}</p><table><tr><th>Key</th><th>Value</th><th>Type</th></tr>${plistData.map(p => `<tr><td>${p.key}</td><td>${p.value}</td><td>${p.type}</td></tr>`).join('')}</table>`;
 }
 
-function cleanBrowserCache() {
-    const results = document.getElementById('browser-results');
-    results.innerHTML = '<p>Cleaned browser cache: 1.2GB freed.</p>';
+document.getElementById('login-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    alert(`Logged in as ${username}`);
+    window.location.href = 'index.html';
+});
+
+document.getElementById('register-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('reg-username').value;
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+    alert(`Registered ${username} with ${email}`);
+    window.location.href = 'login.html';
+});
+
+function logout() {
+    alert('Logged out');
+    window.location.href = 'login.html';
 }
