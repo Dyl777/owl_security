@@ -1,4 +1,4 @@
-# System Cleanup & Monitoring — UI
+# System Cleanup & Monitoring Tool
 
 A **UI-only** for a system cleanup, monitoring, and security tool meant to be
 binded later to a backend.
