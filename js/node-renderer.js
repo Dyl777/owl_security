@@ -252,12 +252,26 @@ const nodeRenderer = {
         ctx.stroke();
 
         // Optional: Stripe for n8n style if transparent or white
-        if (bgColor === 'rgba(255, 255, 255, 0)' || bgColor === '#ffffff' || bgColor === '#1c2128') {
+        if (bgColor === 'rgba(255, 255, 255, 0)' || bgColor === '#ffffff' || bgColor === '#1c2128' || bgColor === 'transparent') {
             ctx.save();
             ctx.beginPath();
-            if (currentShape === 'roundedRect') {
-                if (ctx.roundRect) ctx.roundRect(x - width / 2, y - height / 2, 6, height, { tl: 12, bl: 12 });
-                else ctx.rect(x - width / 2, y - height / 2, 6, height);
+            const stripeWidth = 6;
+
+            // Determine left edge based on shape geometry
+            let leftEdge = x - width / 2;
+            if (currentShape === 'notGate') leftEdge = x - width / 2.5;
+
+            const topEdge = y - height / 2;
+
+            const hasStraightLeft = ['roundedRect', 'rect', 'square', 'puzzlePiece', 'andGate', 'notGate'].includes(currentShape);
+
+            if (hasStraightLeft) {
+                if (currentShape === 'roundedRect') {
+                    if (ctx.roundRect) ctx.roundRect(leftEdge, topEdge, stripeWidth, height, { tl: 12, bl: 12 });
+                    else ctx.rect(leftEdge, topEdge, stripeWidth, height);
+                } else {
+                    ctx.rect(leftEdge, topEdge, stripeWidth, height);
+                }
                 ctx.fillStyle = dotColor; ctx.fill();
             }
             ctx.restore();
