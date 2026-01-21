@@ -175,6 +175,21 @@
                                 <option value="critical">Critical</option>
                             </select>
                         </div>
+
+                        <!-- Ports Manager -->
+                        <div class="inspector-field">
+                            <label style="display: flex; justify-content: space-between; align-items: center;">
+                                Connection Ports
+                                <button id="add-port-btn" class="manip-btn"
+                                    style="padding: 2px 8px; font-size: 0.8rem;">
+                                    <i data-lucide="plus"></i> Add
+                                </button>
+                            </label>
+                            <div id="ports-container"
+                                style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                                <!-- Ports will be injected here via JS -->
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Edge Specific Fields (Hidden by default) -->

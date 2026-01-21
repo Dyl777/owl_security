@@ -173,7 +173,8 @@ const nodeRenderer = {
         }
     },
 
-    drawNode: function (ctx, { x, y, state, label, group, shape, icon, customColor }) {
+    drawNode: function (ctx, { x, y, state, label, group, shape, icon, customColor, ports }) {
+        const options = { ports }; // Backwards compatibility for my inserted code using 'options'
         const isDark = document.body.classList.contains('dark-mode');
         const currentShape = shape || 'roundedRect';
         const currentIconKey = icon || group;
@@ -228,36 +229,81 @@ const nodeRenderer = {
             ctx.fillStyle = bgColor; ctx.fill(); ctx.stroke();
         }
 
-        let iconX = x; let iconY = y; let textX = x; let textY = y;
-        let showText = true; let textAlign = 'center';
+        // 2. Dynamic Content Layout
+        let iconX = x; let iconY = y;
+        let textX = x; let textY = y;
+        let showText = true;
+        let textAlign = 'center';
 
-        if (currentShape === 'roundedRect' || currentShape === 'puzzlePiece' || currentShape === 'rect') {
-            iconX = x - width / 2 + 34; textX = x - width / 2 + 64; textAlign = 'left';
-        } else if (currentShape === 'circle' || currentShape === 'square' || currentShape === 'hexagon' || currentShape === 'semicircle') {
-            iconY = y - 12; textY = y + 20;
-        } else if (currentShape === 'andGate' || currentShape === 'orGate') {
-            iconX = x - width / 4; textX = x + width / 8; textAlign = 'left';
-        } else if (currentShape === 'rhombus' || currentShape === 'triangle') {
-            // Triangle/Rhombus are bottom-heavy, shift icons down to hit visual center
-            iconY = y + 5; textY = y + 28;
-            if (currentShape === 'triangle') { iconY = y + 12; textY = y + 32; }
+        const iconSize = 32; // Diameter
+        const gap = 8;
+
+        ctx.font = `600 13px 'Inter', -apple-system, sans-serif`;
+        const textMetrics = ctx.measureText(label || '');
+        const textWidth = textMetrics.width;
+
+        const isHorizontal = ['roundedRect', 'rect', 'puzzlePiece', 'andGate', 'orGate'].includes(currentShape);
+        const isVertical = ['circle', 'square', 'hexagon', 'semicircle', 'rhombus', 'triangle'].includes(currentShape);
+
+        if (isHorizontal) {
+            // Horizontal Layout: [Icon] [Text] centered
+            const totalWidth = iconSize + gap + textWidth;
+            const startX = x - totalWidth / 2;
+
+            iconX = startX + iconSize / 2;
+            textX = startX + iconSize + gap + textWidth / 2; // Text is drawn from center if textAlign=center (default)
+
+            // Adjust because we set textAlign = 'center' generally, but here let's use 'left' for easier math? 
+            // Actually, keep it simple: 
+            textAlign = 'left';
+            textX = startX + iconSize + gap;
+
+            // Adjustments for specific shapes logic
+            if (currentShape === 'andGate' || currentShape === 'orGate') {
+                iconX -= 10; textX -= 10; // Shift left slightly to avoid curved right edge
+            }
+
+        } else if (isVertical) {
+            // Vertical Layout: Icon above Text
+            const totalHeight = iconSize + gap + 10; // 10 approx text height
+            iconY = y - 8;
+            textY = y + 16;
+
+            if (currentShape === 'triangle') {
+                iconY += 10; textY += 10; // Shift down for triangle center of gravity
+            }
         } else if (currentShape === 'notGate') {
             iconX = x - 5; showText = false;
         }
 
+        // Draw Icon Background
         ctx.beginPath(); ctx.arc(iconX, iconY, 16, 0, Math.PI * 2);
         ctx.fillStyle = isDark ? dotColor + '30' : dotColor + '15'; ctx.fill();
 
+        // Draw Icon
         ctx.beginPath(); ctx.strokeStyle = dotColor; ctx.lineWidth = 1.8;
         const drawIcon = this.icons[currentIconKey] || this.icons.shield;
         drawIcon(ctx, iconX, iconY, 16); ctx.stroke();
 
+        // Draw Label
         if (showText && label) {
             let fontSize = 13;
-            if (currentShape === 'rhombus' || currentShape === 'triangle') fontSize = 10;
+            if (currentShape === 'rhombus' || currentShape === 'triangle') fontSize = 11;
+
             ctx.font = `600 ${fontSize}px 'Inter', -apple-system, sans-serif`;
-            ctx.fillStyle = textColor; ctx.textAlign = textAlign; ctx.textBaseline = "middle";
-            let displayLabel = label; if (displayLabel.length > 20) displayLabel = displayLabel.substring(0, 17) + '...';
+            ctx.fillStyle = textColor;
+            ctx.textAlign = textAlign;
+            ctx.textBaseline = "middle";
+
+            // Truncate if REALLY long (longer than node width - padding)
+            let displayLabel = label;
+            const maxWidth = width - 40;
+            if (isHorizontal && textWidth > maxWidth) {
+                // Simple char truncation approximation
+                const approxChars = Math.floor(maxWidth / 7);
+                if (displayLabel.length > approxChars) displayLabel = displayLabel.substring(0, approxChars) + '...';
+            }
+
             ctx.fillText(displayLabel, textX, textY);
         }
 
@@ -274,6 +320,39 @@ const nodeRenderer = {
             else ctx.rect(x + off - pw / 2, y - ph / 2, pw, ph);
             ctx.fill(); ctx.stroke();
         });
+
+        // Draw Custom Ports if they exist
+        if (options && options.ports && options.ports.length > 0) {
+            options.ports.forEach(port => {
+                let px = x;
+                let py = y;
+                const r = 5;
+
+                // Calculate position based on side
+                if (port.side === 'left') {
+                    px = x - width / 2;
+                    py = y; // Centered vertically on left edge by default
+                } else if (port.side === 'right') {
+                    px = x + width / 2;
+                    py = y;
+                } else if (port.side === 'top') {
+                    px = x;
+                    py = y - height / 2;
+                } else if (port.side === 'bottom') {
+                    px = x;
+                    py = y + height / 2;
+                }
+
+                // Draw Port Connector
+                ctx.beginPath();
+                ctx.arc(px, py, r, 0, Math.PI * 2);
+                ctx.fillStyle = port.type === 'input' ? '#ffffff' : (isDark ? '#58a6ff' : '#0969da');
+                ctx.strokeStyle = borderColor;
+                ctx.lineWidth = 1;
+                ctx.fill();
+                ctx.stroke();
+            });
+        }
     }
 };
 

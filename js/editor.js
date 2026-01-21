@@ -67,12 +67,35 @@ function initEditor() {
         nodes: {
             shape: 'custom',
             ctxRenderer: ({ ctx, id, x, y, state, label }) => {
-                const node = nodes.get(id);
-                if (!node) return { drawNode: () => { }, nodeDimensions: { width: 0, height: 0 } };
+                // Ensure ID is handled correctly (string/number mismatch)
+                const node = nodes.get(id) || nodes.get(parseInt(id));
+                const defaultDims = { width: 40, height: 40 };
 
-                const currentShape = node.shape || 'roundedRect';
+                if (!node) {
+                    return {
+                        drawNode: () => { },
+                        nodeDimensions: defaultDims
+                    };
+                }
+
+                // Determine the visual shape to draw
+                // If shape is 'custom' (or undefined inheriting custom), look for visualShape
+                // Otherwise fall back to the shape property itself (if it was somehow set to a standard shape)
+                let currentShape = node.visualShape;
+                if (!currentShape) {
+                    currentShape = (node.shape === 'custom' || !node.shape) ? 'roundedRect' : node.shape;
+                }
+
                 const currentIcon = node.icon || node.group;
-                const dims = window.nodeRenderer.getDimensions(currentShape);
+
+
+                // Get dimensions with fallback
+                let dims;
+                try {
+                    dims = window.nodeRenderer.getDimensions(currentShape);
+                } catch (e) {
+                    dims = defaultDims;
+                }
 
                 return {
                     drawNode: () => {
@@ -81,10 +104,14 @@ function initEditor() {
                             group: node.group,
                             shape: currentShape,
                             icon: currentIcon,
-                            customColor: node.color
+                            customColor: node.color,
+                            ports: node.ports
                         });
                     },
-                    nodeDimensions: { width: dims.width, height: dims.height }
+                    nodeDimensions: {
+                        width: dims.width || defaultDims.width,
+                        height: dims.height || defaultDims.height
+                    }
                 };
             }
         },
@@ -283,6 +310,9 @@ function simulateAttack() {
     }
 }
 
+
+let currentPorts = [];
+
 function openInspector(type, id) {
     inspectorTarget = { type, id };
     const inspector = document.getElementById('node-inspector');
@@ -299,7 +329,8 @@ function openInspector(type, id) {
         document.getElementById('node-name-input').value = node.label || '';
         document.getElementById('node-type-select').value = node.group || 'container';
 
-        selectedShape = node.shape || 'roundedRect';
+        // Load visual shape, defaulting to roundedRect if missing or if shape is 'custom'
+        selectedShape = node.visualShape || (node.shape === 'custom' || !node.shape ? 'roundedRect' : node.shape);
         updateShapePickerUI();
 
         selectedIcon = node.icon || node.group || 'shield';
@@ -312,6 +343,14 @@ function openInspector(type, id) {
         const nodeColor = node.color || '#ffffff';
         document.getElementById('node-color-input').value = nodeColor;
         document.getElementById('node-color-hex').value = nodeColor.toUpperCase();
+
+        // Initialize ports if not present
+        currentPorts = node.ports ? JSON.parse(JSON.stringify(node.ports)) : [
+            { id: 'p1', type: 'input', side: 'left' },
+            { id: 'p2', type: 'output', side: 'right' }
+        ];
+        renderPortsManager();
+
     } else {
         const edge = edges.get(inspectorTarget.id);
         title.innerText = "Connection Details";
@@ -345,6 +384,50 @@ function closeInspector() {
     inspectorTarget = { type: null, id: null };
 }
 
+function renderPortsManager() {
+    const container = document.getElementById('ports-container');
+    container.innerHTML = '';
+
+    currentPorts.forEach((port, index) => {
+        const div = document.createElement('div');
+        div.className = 'inspector-field';
+        div.style.marginBottom = '2px';
+        div.style.padding = '8px';
+        div.style.background = 'rgba(0,0,0,0.02)';
+        div.style.borderRadius = '4px';
+        div.style.border = '1px solid var(--border-color)';
+        div.innerHTML = `
+            <div style="display:flex; gap:8px; align-items:center;">
+                <select onchange="updatePort(${index}, 'type', this.value)" style="flex:1; padding:2px;">
+                    <option value="input" ${port.type === 'input' ? 'selected' : ''}>Input</option>
+                    <option value="output" ${port.type === 'output' ? 'selected' : ''}>Output</option>
+                </select>
+                <select onchange="updatePort(${index}, 'side', this.value)" style="flex:1; padding:2px;">
+                    <option value="left" ${port.side === 'left' ? 'selected' : ''}>Left</option>
+                    <option value="right" ${port.side === 'right' ? 'selected' : ''}>Right</option>
+                    <option value="top" ${port.side === 'top' ? 'selected' : ''}>Top</option>
+                    <option value="bottom" ${port.side === 'bottom' ? 'selected' : ''}>Bottom</option>
+                </select>
+                <i data-lucide="trash-2" style="width:16px; cursor:pointer; color:var(--danger-color);" 
+                   onclick="removePort(${index})"></i>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+window.updatePort = (index, key, value) => {
+    if (currentPorts[index]) {
+        currentPorts[index][key] = value;
+    }
+}
+
+window.removePort = (index) => {
+    currentPorts.splice(index, 1);
+    renderPortsManager();
+}
+
 function updateInspectorData() {
     if (!inspectorTarget.id) return;
 
@@ -358,12 +441,14 @@ function updateInspectorData() {
             id: inspectorTarget.id,
             label: name,
             group: type,
-            shape: selectedShape,
+            shape: 'custom',       // Force custom renderer
+            visualShape: selectedShape, // Store actual geometry type
             icon: selectedIcon,
             title: desc,
             risk: risk,
             color: document.getElementById('node-color-hex').value,
-            ioRole: document.getElementById('node-io-role').value
+            ioRole: document.getElementById('node-io-role').value,
+            ports: currentPorts
         });
     } else {
         const label = document.getElementById('edge-label-input').value;
@@ -396,6 +481,19 @@ function updateInspectorData() {
     if (typeof lucide !== 'undefined') lucide.createIcons();
     closeInspector();
 }
+
+function setupPortManager() {
+    const addBtn = document.getElementById('add-port-btn');
+    if (addBtn) {
+        addBtn.onclick = (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            currentPorts.push({ id: 'p' + Date.now(), type: 'output', side: 'right' });
+            renderPortsManager();
+        }
+    }
+}
+
 
 // Icon Picker Logic
 function setupIconPicker() {
@@ -531,6 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupToolbox();
     setupIconPicker();
     setupShapePicker();
+    setupPortManager();
 
     // Color Picker Sync (Node & Edge)
     const setupSync = (idPicker, idHex) => {
