@@ -159,11 +159,15 @@
                         </div>
                         <div class="inspector-field">
                             <label>Asset Color</label>
-                            <div style="display: flex; gap: 10px; align-items: center;">
+                            <div style="display: flex; gap: 8px; align-items: center;">
                                 <input type="color" id="node-color-input" value="#ffffff"
-                                    style="width: 40px; height: 32px; padding: 2px;">
+                                    style="width: 32px; height: 32px; padding: 0; border: none; cursor: pointer;">
                                 <input type="text" id="node-color-hex" placeholder="#HEX"
-                                    style="flex: 1; font-family: monospace; font-size: 0.8rem;">
+                                    style="flex: 1; font-family: monospace; font-size: 0.8rem; padding: 6px;">
+                                <button id="node-color-transparent-btn" class="btn btn-secondary"
+                                    style="padding: 4px 8px; font-size: 0.75rem;" title="Make Transparent">
+                                    <i data-lucide="droplet-off" style="width: 14px; height: 14px;"></i>
+                                </button>
                             </div>
                         </div>
                         <div class="inspector-field">

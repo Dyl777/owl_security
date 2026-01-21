@@ -92,7 +92,7 @@ function initEditor() {
                 // Get dimensions with fallback
                 let dims;
                 try {
-                    dims = window.nodeRenderer.getDimensions(currentShape);
+                    dims = window.nodeRenderer.getDimensions(currentShape, label, ctx);
                 } catch (e) {
                     dims = defaultDims;
                 }
@@ -105,7 +105,8 @@ function initEditor() {
                             shape: currentShape,
                             icon: currentIcon,
                             customColor: node.color,
-                            ports: node.ports
+                            ports: node.ports,
+                            isTransparent: node.isTransparent
                         });
                     },
                     nodeDimensions: {
@@ -340,9 +341,9 @@ function openInspector(type, id) {
         document.getElementById('node-risk-select').value = node.risk || 'medium';
         document.getElementById('node-io-role').value = node.ioRole || 'none';
 
-        const nodeColor = node.color || '#ffffff';
-        document.getElementById('node-color-input').value = nodeColor;
-        document.getElementById('node-color-hex').value = nodeColor.toUpperCase();
+        const nodeColor = node.color || 'transparent';
+        document.getElementById('node-color-hex').value = nodeColor === 'transparent' ? 'transparent' : nodeColor.toUpperCase();
+        document.getElementById('node-color-input').value = (nodeColor === 'transparent') ? '#ffffff' : nodeColor;
 
         // Initialize ports if not present
         currentPorts = node.ports ? JSON.parse(JSON.stringify(node.ports)) : [
@@ -446,6 +447,7 @@ function updateInspectorData() {
             icon: selectedIcon,
             title: desc,
             risk: risk,
+            color: document.getElementById('node-color-hex').value,
             color: document.getElementById('node-color-hex').value,
             ioRole: document.getElementById('node-io-role').value,
             ports: currentPorts
@@ -642,6 +644,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     setupSync('edge-color-input', 'edge-color-hex');
     setupSync('node-color-input', 'node-color-hex');
+
+    // Transparent Button Logic
+    const transBtn = document.getElementById('node-color-transparent-btn');
+    if (transBtn) {
+        transBtn.onclick = () => {
+            document.getElementById('node-color-hex').value = 'transparent';
+            // Visual feedback: set picker to white or disable?
+            document.getElementById('node-color-input').value = '#ffffff';
+        }
+    }
 
     if (typeof lucide !== 'undefined') lucide.createIcons();
 });

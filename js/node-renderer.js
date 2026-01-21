@@ -158,27 +158,59 @@ const nodeRenderer = {
         }
     },
 
-    getDimensions: function (shape) {
+    getDimensions: function (shape, label, ctx) {
+        let w = 200, h = 64;
+        let fontSize = 13;
+
         switch (shape) {
-            case 'square': return { width: 80, height: 80 };
-            case 'circle': return { width: 100, height: 100 };
-            case 'triangle': return { width: 120, height: 100 };
-            case 'rhombus': return { width: 120, height: 120 };
-            case 'hexagon': return { width: 120, height: 100 };
-            case 'semicircle': return { width: 120, height: 80 };
+            case 'square': w = 80; h = 80; break;
+            case 'circle': w = 100; h = 100; break;
+            case 'triangle': w = 120; h = 100; fontSize = 11; break;
+            case 'rhombus': w = 120; h = 120; fontSize = 11; break;
+            case 'hexagon': w = 120; h = 100; break;
+            case 'semicircle': w = 120; h = 80; break;
             case 'andGate':
-            case 'orGate': return { width: 180, height: 80 };
-            case 'notGate': return { width: 120, height: 64 };
-            default: return { width: 200, height: 64 };
+            case 'orGate': w = 180; h = 80; break;
+            case 'notGate': w = 120; h = 64; break;
+            case 'rect':
+            case 'puzzlePiece': w = 160; h = 64; break;
+            default: w = 160; h = 64; break; // roundedRect default
         }
+
+        if (label && ctx) {
+            ctx.font = `600 ${fontSize}px 'Inter', -apple-system, sans-serif`;
+            const metrics = ctx.measureText(label);
+            const textWidth = metrics.width;
+
+            const isHorizontal = ['roundedRect', 'rect', 'puzzlePiece', 'andGate', 'orGate', 'notGate'].includes(shape || 'roundedRect');
+
+            if (isHorizontal) {
+                // Icon (32) + Gap (8) + Padding (40)
+                const minWidth = textWidth + 80;
+                if (minWidth > w) w = minWidth;
+            } else {
+                // For vertical shapes (circle, square), expand uniformly to maintain shape ratio if desired, 
+                // or just ensure width covers it. For circle/square, usually aspect ratio 1:1 is best.
+                const minSize = textWidth + 40;
+                if (minSize > w) {
+                    w = minSize;
+                    if (shape === 'circle' || shape === 'square') h = minSize; // Keep 1:1
+                    else h = h * (minSize / 120); // Scale height proportionally for others
+                }
+            }
+        }
+
+        return { width: w, height: h };
     },
 
-    drawNode: function (ctx, { x, y, state, label, group, shape, icon, customColor, ports }) {
-        const options = { ports }; // Backwards compatibility for my inserted code using 'options'
+    drawNode: function (ctx, { x, y, state, label, group, shape, icon, customColor, ports, isTransparent }) {
+        const options = { ports };
         const isDark = document.body.classList.contains('dark-mode');
         const currentShape = shape || 'roundedRect';
         const currentIconKey = icon || group;
-        const dims = this.getDimensions(currentShape);
+
+        // Pass label and ctx to get dynamic dimensions
+        const dims = this.getDimensions(currentShape, label, ctx);
         const { width, height } = dims;
 
         // Color Logic: Priority -> customColor -> groupStyle -> fallback
@@ -190,12 +222,13 @@ const nodeRenderer = {
         };
         const dotColor = dotColors[currentIconKey] || dotColors[group] || '#6e7681';
 
-        // Background logic: Priority -> customColor -> subtle group color -> theme default
-        let bgColor = customColor || (isDark ? '#1c2128' : '#ffffff');
-        if (!customColor && dotColor) {
-            // If no custom color, use a faint tint of the group color
-            if (!isDark) bgColor = dotColor + '08'; // 5% opacity tint
-            else bgColor = dotColor + '15'; // Subtle dark theme tint
+        // Background Logic
+        // 1. Transparent if explicity requested ('transparent') OR undefined (default).
+        // 2. Solid/Tint if customColor is set to a hex/rgb value.
+        let bgColor = 'rgba(255, 255, 255, 0)';
+
+        if (customColor && customColor !== 'transparent') {
+            bgColor = customColor;
         }
 
         const borderColor = isDark ? '#444c56' : '#e2e8f0';
@@ -203,15 +236,23 @@ const nodeRenderer = {
         const accentColor = '#ff6d5f';
 
         ctx.shadowColor = isDark ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.05)';
-        ctx.shadowBlur = 15; ctx.shadowOffsetY = 5;
+        ctx.shadowBlur = 10; ctx.shadowOffsetY = 4;
         ctx.beginPath();
         const drawShape = this.shapes[currentShape] || this.shapes.roundedRect;
-        drawShape(ctx, x, y, width, height); ctx.fillStyle = bgColor; ctx.fill();
-        ctx.shadowBlur = 0; ctx.strokeStyle = state.selected ? accentColor : borderColor;
-        ctx.lineWidth = state.selected ? 2.5 : 1.5; ctx.stroke();
+        drawShape(ctx, x, y, width, height);
 
-        // Optional: Stripe for n8n style if no custom color
-        if (!customColor || customColor === '#ffffff' || customColor === '#1c2128' || bgColor.length > 7) {
+        // Fill
+        ctx.fillStyle = bgColor;
+        ctx.fill();
+
+        // Border
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = state.selected ? accentColor : borderColor;
+        ctx.lineWidth = state.selected ? 2.5 : 1.5;
+        ctx.stroke();
+
+        // Optional: Stripe for n8n style if transparent or white
+        if (bgColor === 'rgba(255, 255, 255, 0)' || bgColor === '#ffffff' || bgColor === '#1c2128') {
             ctx.save();
             ctx.beginPath();
             if (currentShape === 'roundedRect') {
