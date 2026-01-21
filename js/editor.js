@@ -167,6 +167,45 @@ function initEditor() {
 
     editorNetwork = new vis.Network(container, data, options);
 
+    // Initialize the Math-Net Dot Grid
+    editorNetwork.on("beforeDrawing", (ctx) => {
+        const isDark = document.body.classList.contains('dark-mode');
+        // Use colors from our CSS tokens loosely
+        const dotColor = isDark ? 'rgba(48, 54, 61, 0.8)' : 'rgba(200, 205, 215, 0.7)';
+
+        const spacing = 25;
+        const view = editorNetwork.getViewPosition();
+        const scale = editorNetwork.getScale();
+
+        // Bounds of the visible canvas in world coordinates
+        const w = container.clientWidth / scale;
+        const h = container.clientHeight / scale;
+
+        const left = view.x - w / 2;
+        const top = view.y - h / 2;
+        const right = view.x + w / 2;
+        const bottom = view.y + h / 2;
+
+        ctx.save();
+        ctx.fillStyle = dotColor;
+
+        // Find the first grid line to start at
+        const startX = Math.floor(left / spacing) * spacing;
+        const startY = Math.floor(top / spacing) * spacing;
+
+        // Draw dots
+        const dotRadius = Math.max(0.5, 1 / scale);
+
+        for (let x = startX; x < right + spacing; x += spacing) {
+            for (let y = startY; y < bottom + spacing; y += spacing) {
+                ctx.beginPath();
+                ctx.arc(x, y, dotRadius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        ctx.restore();
+    });
+
     // Event Listeners
     editorNetwork.on("doubleClick", (params) => {
         if (params.nodes.length > 0) {
