@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Reporting - Owl Security</title>
+    <link rel="stylesheet" href="css/showcase.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <div class="ticker-container">
+        <div class="ticker-text">
+            SYSTEM STATUS: MONITORING ACTIVE • NO CRITICAL THREATS DETECTED • LAST SCAN: 2 MINUTES AGO • DOCKER SWARM:
+            OPERATIONAL • SECURITY SHIELD: 100%
+        </div>
+    </div>
+    <header>
+        <h1>Owl Security: Reporting</h1>
+        <button id="hamburger" class="hamburger" aria-label="Toggle Navigation"><i data-lucide="menu"></i></button>
+        <nav id="nav-menu">
+            <button id="theme-btn" class="theme-toggle"><i data-lucide="moon"></i> <span>Dark Mode</span></button>
+            <a href="index.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="report.html" style="color: var(--accent-color);"><i data-lucide="shield-alert"></i> Report</a>
+            <a href="owasp.html"><i data-lucide="database"></i> OWASP</a>
+            <a href="graph.html"><i data-lucide="network"></i> Graph</a>
+            <a href="editor.html"><i data-lucide="edit-3"></i> Editor</a>
+            <a href="integrations.html"><i data-lucide="puzzle"></i> Integrations</a>
+        </nav>
+    </header>
+    <main>
+        <div class="card">
+            <h2>Report Security Incident</h2>
+            <p>Log security vulnerabilities or problems discovered in your applications or repositories.</p>
+            <form id="report-form">
+                <label for="app-name">Application or Repository Name</label>
+                <input type="text" id="app-name" placeholder="e.g. backend-api or customer-portal" required>
+
+                <div style="display: flex; gap: 1rem;">
+                    <div style="flex: 1;">
+                        <label for="affected-section">Affected Section</label>
+                        <select id="affected-section">
+                            <optgroup label="Dashboard">
+                                <option value="Docker Status">Docker Status Panel</option>
+                                <option value="Build/Cache">Build & Cache Cleanup</option>
+                                <option value="Secret Scanning">Secret Scanning Panel</option>
+                                <option value="Git Hygiene">Git Repository Hygiene</option>
+                                <option value="Browser Cache">Browser Cache Cleanup</option>
+                            </optgroup>
+                            <optgroup label="Log Monitoring">
+                                <option value="Log File">Single Log File</option>
+                                <option value="Log Directory">Log Directory Scan</option>
+                                <option value="Log Grouping">Log Grouping logic</option>
+                            </optgroup>
+                            <optgroup label="Anomaly Detection">
+                                <option value="Commits">Unusual Commits</option>
+                                <option value="Shutdown">Shutdown Anomalies</option>
+                                <option value="Charging">Charging Periods</option>
+                                <option value="Kernel">Kernel Processes</option>
+                                <option value="Ports">Open Ports Anomalies</option>
+                            </optgroup>
+                            <optgroup label="Settings/System">
+                                <option value="Security Swarm">Security Swarm (Agentic)</option>
+                                <option value="Backup">Backup & Safety</option>
+                                <option value="Registry">System Registries (Win/Mac/Linux)</option>
+                                <option value="Cloud">Cloud Backup</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div style="flex: 1;">
+                        <label for="severity">Severity</label>
+                        <select id="severity">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label for="report-desc">Problem Description</label>
+                <textarea id="report-desc" rows="4" placeholder="Briefly describe what happened..." required></textarea>
+
+                <label for="report-image">Upload Evidence (Screenshots)</label>
+                <input type="file" id="report-image" accept="image/*">
+
+                <button type="submit">Save Report</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Stored Reports</h2>
+            <div id="reports-list">
+                Loading reports...
+            </div>
+        </div>
+    </main>
+    <script src="js/showcase.js"></script>
+</body>
+
+</html>

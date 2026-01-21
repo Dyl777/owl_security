@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owl Security | Graph Editor</title>
+    <link rel="stylesheet" href="css/showcase.css">
+    <link rel="stylesheet" href="css/editor.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script src="js/node-renderer.js"></script>
+</head>
+
+<body>
+    <div id="editor-canvas-container">
+        <!-- Floating Top Bar -->
+        <div class="floating-panel top-bar">
+            <div class="logo">
+                <i data-lucide="shield"></i>
+                <span>OWL EDITOR</span>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html">Dashboard</a>
+                <a href="report.html">Reports</a>
+                <a href="graph.html">Viewer</a>
+                <a href="integrations.html">Integrations</a>
+            </nav>
+            <button id="theme-btn" class="theme-toggle" onclick="toggleTheme()"
+                style="background:none; border:none; cursor:pointer;">
+                <i data-lucide="moon"></i>
+            </button>
+        </div>
+
+        <!-- Node Toolbox Sidebar -->
+        <div class="floating-panel node-toolbox">
+            <h3>Assets Library</h3>
+            <div class="tool-item cloud" draggable="true" data-type="world">
+                <i data-lucide="globe"></i>
+                <span>Internet / Cloud</span>
+            </div>
+            <div class="tool-item repo" draggable="true" data-type="repo">
+                <i data-lucide="github"></i>
+                <span>Source Repository</span>
+            </div>
+            <div class="tool-item container" draggable="true" data-type="container">
+                <i data-lucide="box"></i>
+                <span>Container / Pod</span>
+            </div>
+            <div class="tool-item secret" draggable="true" data-type="secret">
+                <i data-lucide="key"></i>
+                <span>Access Secret</span>
+            </div>
+            <div class="tool-item db" draggable="true" data-type="db">
+                <i data-lucide="database"></i>
+                <span>Secure Database</span>
+            </div>
+
+            <hr style="opacity: 0.1; margin: 0.5rem 0;">
+
+            <button class="manip-btn" id="add-node-btn">
+                <i data-lucide="plus-circle" style="width: 1rem; vertical-align: middle;"></i> New Node
+            </button>
+        </div>
+
+        <!-- Manipulation Toolbar (Right) -->
+        <div class="floating-panel manip-bar">
+            <button class="manip-btn" id="connect-mode-btn" title="Add Connections">
+                <i data-lucide="link"></i> Connect
+            </button>
+            <button class="manip-btn" id="delete-mode-btn" title="Delete Elements">
+                <i data-lucide="trash-2"></i> Delete
+            </button>
+        </div>
+
+        <!-- Zoom Controls -->
+        <div class="floating-panel zoom-controls">
+            <button class="zoom-btn" id="zoom-in" title="Zoom In"><i data-lucide="zoom-in"></i></button>
+            <button class="zoom-btn" id="zoom-out" title="Zoom Out"><i data-lucide="zoom-out"></i></button>
+            <button class="zoom-btn" id="zoom-fit" title="Fit to Screen"><i data-lucide="maximize"></i></button>
+        </div>
+
+        <!-- The Canvas -->
+        <div id="editor-network"></div>
+
+        <!-- Node Inspector Panel -->
+        <div id="node-inspector">
+            <div class="inspector-header">
+                <h2 id="inspector-title">Details</h2>
+                <i data-lucide="x" class="close-inspector" onclick="closeInspector()"></i>
+            </div>
+            <div class="inspector-content">
+                <div class="inspector-content">
+                    <!-- Node Specific Fields -->
+                    <div id="node-fields">
+                        <div class="inspector-field">
+                            <label>Node Name</label>
+                            <input type="text" id="node-name-input" placeholder="e.g. Production Cluster">
+                        </div>
+                        <div class="inspector-field">
+                            <label>Asset Type</label>
+                            <select id="node-type-select">
+                                <option value="world">Internet</option>
+                                <option value="repo">Repository</option>
+                                <option value="container">Container</option>
+                                <option value="secret">Secret</option>
+                                <option value="db">Database</option>
+                                <option value="lb">Load Balancer</option>
+                                <option value="server">Physical Server</option>
+                            </select>
+                        </div>
+                        <div class="inspector-field">
+                            <label>Node Shape</label>
+                            <div class="icon-picker-container" id="shape-picker-container">
+                                <button class="manip-btn" id="open-shape-picker"
+                                    style="width: 100%; justify-content: space-between;">
+                                    <span id="current-shape-label">Rounded Box</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </button>
+                                <div id="shape-picker-grid" class="icon-grid-overlay">
+                                    <div class="icon-grid-header">
+                                        <input type="text" id="shape-search" placeholder="Search shapes...">
+                                    </div>
+                                    <div class="icon-grid" id="shape-items-container">
+                                        <!-- Dynamic Shapes -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inspector-field">
+                            <label>Icon / Glyph</label>
+                            <div class="icon-picker-container">
+                                <button class="manip-btn" id="open-icon-picker"
+                                    style="width: 100%; justify-content: space-between;">
+                                    <span id="current-icon-label"><i data-lucide="shield"></i> Shield</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </button>
+                                <div id="icon-picker-grid" class="icon-grid-overlay">
+                                    <div class="icon-grid-header">
+                                        <input type="text" id="icon-search" placeholder="Search icons...">
+                                    </div>
+                                    <div class="icon-grid" id="icon-items-container">
+                                        <!-- Dynamic Icons -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inspector-field">
+                            <label>I/O Role</label>
+                            <select id="node-io-role">
+                                <option value="none">None</option>
+                                <option value="input">Primary Input</option>
+                                <option value="output">Primary Output</option>
+                            </select>
+                        </div>
+                        <div class="inspector-field">
+                            <label>Description</label>
+                            <textarea id="node-desc-input" rows="4"></textarea>
+                        </div>
+                        <div class="inspector-field">
+                            <label>Asset Color</label>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <input type="color" id="node-color-input" value="#ffffff"
+                                    style="width: 40px; height: 32px; padding: 2px;">
+                                <input type="text" id="node-color-hex" placeholder="#HEX"
+                                    style="flex: 1; font-family: monospace; font-size: 0.8rem;">
+                            </div>
+                        </div>
+                        <div class="inspector-field">
+                            <label>Risk Level</label>
+                            <select id="node-risk-select">
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="critical">Critical</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Edge Specific Fields (Hidden by default) -->
+                    <div id="edge-fields" style="display: none;">
+                        <div class="inspector-field">
+                            <label>Connection Label</label>
+                            <input type="text" id="edge-label-input" placeholder="e.g. read/write">
+                        </div>
+                        <div class="inspector-field">
+                            <label>Connection Color</label>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <input type="color" id="edge-color-input" value="#cbd5e1"
+                                    style="width: 40px; height: 32px; padding: 2px;">
+                                <input type="text" id="edge-color-hex" placeholder="#HEX"
+                                    style="flex: 1; font-family: monospace; font-size: 0.8rem;">
+                            </div>
+                        </div>
+                        <div class="inspector-field">
+                            <label>Line Style</label>
+                            <select id="edge-style-select">
+                                <option value="solid">Solid Line</option>
+                                <option value="dashed">Dashed Line</option>
+                                <option value="dotted">Dotted Line</option>
+                            </select>
+                        </div>
+                        <div class="inspector-field">
+                            <label>Thickness (px)</label>
+                            <input type="number" id="edge-width-input" min="1" max="10" value="2">
+                        </div>
+                        <div class="inspector-field">
+                            <label>Curvature Style</label>
+                            <select id="edge-smooth-select">
+                                <option value="false">Direct (Straight)</option>
+                                <option value="dynamic">Curvy (Bendy)</option>
+                                <option value="cubicBezier">Cubic Bezier</option>
+                                <option value="horizontal">Stepped (Horizontal)</option>
+                                <option value="vertical">Stepped (Vertical)</option>
+                            </select>
+                        </div>
+                        <div class="inspector-field">
+                            <label>Flow Direction</label>
+                            <select id="edge-arrows-select">
+                                <option value="to">Forward (Output → Input)</option>
+                                <option value="from">Backward</option>
+                                <option value="middle">Middle Arrow</option>
+                                <option value="to,from">Bidirectional</option>
+                                <option value="">No Arrows</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inspector-footer">
+                    <button class="manip-btn active" id="apply-inspector-btn" style="width: 100%;">Apply
+                        Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/showcase.js"></script>
+    <script src="js/editor.js"></script>
+</body>
+
+</html>

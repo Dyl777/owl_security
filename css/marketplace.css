@@ -1,0 +1,146 @@
+/* Integrations Marketplace Styles */
+
+.marketplace-container {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+    align-items: start;
+    margin-top: 1.5rem;
+}
+
+.sidebar {
+    position: sticky;
+    top: 5rem;
+    padding: 1.5rem;
+    height: fit-content;
+}
+
+.sidebar h3 {
+    margin-top: 0;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+    color: var(--accent-color);
+}
+
+#category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#category-list li {
+    padding: 0.75rem 1rem;
+    margin: 0.25rem 0;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-color);
+}
+
+#category-list li:hover {
+    background: var(--accent-glow);
+    color: var(--accent-color);
+}
+
+#category-list li.active {
+    background: var(--accent-color);
+    color: white;
+}
+
+.count {
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+.marketplace-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.search-card {
+    padding: 1.25rem;
+    margin-bottom: 0;
+}
+
+.integrations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.int-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    height: 100%;
+    position: relative;
+    border: 1px solid var(--border-color);
+    background: var(--secondary-bg);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.int-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+}
+
+.int-icon {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+}
+
+.int-name {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent-color);
+}
+
+.int-desc {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+    line-height: 1.5;
+}
+
+.int-status {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+    width: fit-content;
+    letter-spacing: 0.5px;
+}
+
+.status-connected {
+    background: rgba(46, 160, 67, 0.1);
+    color: var(--success-color);
+    border: 1px solid var(--success-color);
+}
+
+.status-available {
+    background: var(--primary-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+@media (max-width: 900px) {
+    .marketplace-container {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: static;
+        top: 0;
+    }
+}

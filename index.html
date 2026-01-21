@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>System Cleanup & Monitoring</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
     <header>
         <h1>System Cleanup & Monitoring Tool</h1>
@@ -20,52 +22,67 @@
         <button id="logout-btn" class="logout-btn" onclick="logout()">Logout</button>
     </header>
     <main>
-        <section id="dashboard">
-            <h2>Dashboard</h2>
-            <div class="card">
-                <h3>Docker Status</h3>
-                <p>Containers: <span id="container-count">Loading...</span></p>
-                <button onclick="refreshDocker()">Refresh</button>
-                <button onclick="analyzeDocker()">Smart Analysis</button>
-                <div id="docker-analysis" style="display:none;">
-                    <p>Unused containers: <span id="unused-containers">0</span></p>
-                    <p>High memory: <span id="high-mem">0</span></p>
-                    <button onclick="cleanDocker()">Clean</button>
-                </div>
+        <div class="card" style="background: linear-gradient(135deg, #0969da, #1a7f37); color: white; border: none;">
+            <h3 style="color: white;">Security Spotlight</h3>
+            <p>Explore high-end security visualizations and vulnerability mapping hubs.</p>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;">
+                <a href="report.html"
+                    style="background: rgba(255,255,255,0.2); color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.8rem; font-weight: 600;">Incident
+                    Report</a>
+                <a href="owasp.html"
+                    style="background: rgba(255,255,255,0.2); color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.8rem; font-weight: 600;">OWASP
+                    Hub</a>
+                <a href="graph.html"
+                    style="background: rgba(255,255,255,0.2); color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.8rem; font-weight: 600;">Threat
+                    Graph</a>
             </div>
-            <div class="card">
-                <h3>Build & Cache Cleanup</h3>
-                <select id="language-select">
-                    <option>Node.js</option>
-                    <option>Python</option>
-                    <option>Java</option>
-                    <option>Rust</option>
-                    <option>Go</option>
-                    <option>Flutter/Android/iOS</option>
-                </select>
-                <button onclick="scanCache()">Scan & Clean</button>
-                <div id="cache-results"></div>
+        </div>
+
+        <h2>Dashboard</h2>
+        <div class="card">
+            <h3>Docker Status</h3>
+            <p>Containers: <span id="container-count">Loading...</span></p>
+            <button onclick="refreshDocker()">Refresh</button>
+            <button onclick="analyzeDocker()">Smart Analysis</button>
+            <div id="docker-analysis" style="display:none;">
+                <p>Unused containers: <span id="unused-containers">0</span></p>
+                <p>High memory: <span id="high-mem">0</span></p>
+                <button onclick="cleanDocker()">Clean</button>
             </div>
-            <div class="card">
-                <h3>Secret & Credential Scanner</h3>
-                <button onclick="scanSecrets()">Scan for Secrets</button>
-                <div id="secret-results"></div>
-            </div>
-            <div class="card">
-                <h3>Git Repository Hygiene</h3>
-                <button onclick="cleanGit()">Clean Git Repos</button>
-                <div id="git-results"></div>
-            </div>
-            <div class="card">
-                <h3>Browser Caches</h3>
-                <button onclick="cleanBrowserCache()">Clean Browser Cache</button>
-                <div id="browser-results"></div>
-            </div>
+        </div>
+        <div class="card">
+            <h3>Build & Cache Cleanup</h3>
+            <select id="language-select">
+                <option>Node.js</option>
+                <option>Python</option>
+                <option>Java</option>
+                <option>Rust</option>
+                <option>Go</option>
+                <option>Flutter/Android/iOS</option>
+            </select>
+            <button onclick="scanCache()">Scan & Clean</button>
+            <div id="cache-results"></div>
+        </div>
+        <div class="card">
+            <h3>Secret & Credential Scanner</h3>
+            <button onclick="scanSecrets()">Scan for Secrets</button>
+            <div id="secret-results"></div>
+        </div>
+        <div class="card">
+            <h3>Git Repository Hygiene</h3>
+            <button onclick="cleanGit()">Clean Git Repos</button>
+            <div id="git-results"></div>
+        </div>
+        <div class="card">
+            <h3>Browser Caches</h3>
+            <button onclick="cleanBrowserCache()">Clean Browser Cache</button>
+            <div id="browser-results"></div>
+        </div>
         </section>
         <section id="repos" style="display:none;">
             <h2>Repositories</h2>
             <ul id="repo-list">
-                
+
             </ul>
             <button onclick="addRepo()">Add Repository</button>
         </section>
@@ -82,10 +99,10 @@
                 <button onclick="scanLogs()">Scan Directory</button>
             </div>
             <div id="log-content">
-                
+
             </div>
             <div id="grouped-logs">
-                
+
             </div>
         </section>
         <section id="anomalies" style="display:none;">
@@ -191,4 +208,5 @@
     </main>
     <script src="js/script.js"></script>
 </body>
+
 </html>

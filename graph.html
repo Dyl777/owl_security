@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threat Exposure Graph - Owl Security</title>
+    <link rel="stylesheet" href="css/showcase.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+
+<body>
+    <div class="ticker-container">
+        <div class="ticker-text">
+            THREAT INTELLIGENCE: NEW CVE DETECTED IN NODE.JS • DOCKER IMAGES SCANNED: 154 • HIGH RISK PATHS IDENTIFIED:
+            3 • INTEGRATIONS: SLACK (ACTIVE), JIRA (ACTIVE)
+        </div>
+    </div>
+    <header>
+        <h1>Owl Security: Threat Graph</h1>
+        <button id="hamburger" class="hamburger" aria-label="Toggle Navigation"><i data-lucide="menu"></i></button>
+        <nav id="nav-menu">
+            <button id="theme-btn" class="theme-toggle"><i data-lucide="moon"></i> <span>Dark Mode</span></button>
+            <a href="index.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="report.html"><i data-lucide="shield-alert"></i> Report</a>
+            <a href="owasp.html"><i data-lucide="database"></i> OWASP</a>
+            <a href="graph.html" style="color: var(--accent-color);"><i data-lucide="network"></i> Graph</a>
+            <a href="editor.html"><i data-lucide="edit-3"></i> Editor</a>
+            <a href="integrations.html"><i data-lucide="puzzle"></i> Integrations</a>
+        </nav>
+    </header>
+    <main class="animate-in">
+        <div class="card"
+            style="background: linear-gradient(135deg, #1e293b, #0f172a); color: white; border: none; overflow: hidden; position: relative;">
+            <div style="position: relative; z-index: 2;">
+                <h2 style="color: white; margin-bottom: 0.5rem;">Interactive Exposure Map</h2>
+                <p style="opacity: 0.8; margin: 0; max-width: 600px;">Visualize how vulnerabilities propagate across
+                    your infrastructure. Click on nodes to inspect asset details and connected risks.</p>
+            </div>
+            <div style="position: absolute; right: 20px; top: 20px; font-size: 6rem; opacity: 0.1;"><i
+                    data-lucide="network" style="width: 100px; height: 100px;"></i></div>
+        </div>
+
+        <div class="card"
+            style="padding: 0; min-height: 500px; position: relative; background: var(--input-bg); overflow: hidden;">
+            <div id="graph-controls"
+                style="position: absolute; top: 1rem; left: 1rem; z-index: 10; display: flex; gap: 0.5rem;">
+                <button onclick="resimulateGraph()" style="font-size: 0.8rem; padding: 0.5rem 1rem;">🔄
+                    Resimulate</button>
+                <button onclick="toggleIntegrations()" id="toggle-int-btn"
+                    style="font-size: 0.8rem; padding: 0.5rem 1rem;">Hide Alerts</button>
+            </div>
+
+            <div id="threat-network"
+                style="width: 100%; height: 500px; border-radius: 12px; background: var(--secondary-bg);"></div>
+
+            <div id="node-details" class="card"
+                style="position: absolute; bottom: 1rem; right: 1rem; width: 280px; margin: 0; display: none; transform: scale(0.9); transform-origin: bottom right;">
+                <h3 id="detail-title" style="margin: 0; font-size: 1.1rem;">Asset Detail</h3>
+                <p id="detail-desc" style="font-size: 0.85rem; margin: 0.5rem 0; opacity: 0.8;"></p>
+                <div id="detail-tags"></div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            <div class="card">
+                <h3>Critical Path Analysis</h3>
+                <ul id="critical-paths" style="font-size: 0.9rem; padding-left: 1.2rem; color: var(--text-color);">
+                    <li>Internet exposure → <span
+                            style="color: var(--danger-color); font-weight: bold;">Container#82</span> → Admin DB</li>
+                    <li>GitHub Secret leak → <span style="color: var(--warning-color); font-weight: bold;">CI/CD
+                            Pipeline</span> → Prod Registry</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Active Integrations</h3>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <div
+                        style="background: rgba(84, 197, 248, 0.1); border: 1px solid rgba(84, 197, 248, 0.3); padding: 0.5rem 1rem; border-radius: 8px; flex: 1; text-align: center;">
+                        <div style="font-size: 1.5rem; margin-bottom: 0.2rem; color: #54c5f8;"><i
+                                data-lucide="message-square"></i></div>
+                        <div style="font-weight: bold; font-size: 0.8rem;">Slack</div>
+                        <div style="color: var(--success-color); font-size: 0.7rem;">Connected</div>
+                    </div>
+                    <div
+                        style="background: rgba(0, 82, 204, 0.1); border: 1px solid rgba(0, 82, 204, 0.3); padding: 0.5rem 1rem; border-radius: 8px; flex: 1; text-align: center;">
+                        <div style="font-size: 1.5rem; margin-bottom: 0.2rem; color: #0052cc;"><i
+                                data-lucide="clipboard-check"></i></div>
+                        <div style="font-weight: bold; font-size: 0.8rem;">Jira</div>
+                        <div style="color: var(--success-color); font-size: 0.7rem;">Connected</div>
+                    </div>
+                    <div
+                        style="background: rgba(255, 69, 0, 0.1); border: 1px solid rgba(255, 69, 0, 0.3); padding: 0.5rem 1rem; border-radius: 8px; flex: 1; text-align: center;">
+                        <div style="font-size: 1.5rem; margin-bottom: 0.2rem; color: #8b949e;"><i
+                                data-lucide="mail"></i></div>
+                        <div style="font-weight: bold; font-size: 0.8rem;">Email</div>
+                        <div style="color: #8b949e; font-size: 0.7rem;">Disabled</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="js/showcase.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrations Marketplace - Owl Security</title>
+    <link rel="stylesheet" href="css/showcase.css">
+    <link rel="stylesheet" href="css/marketplace.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <div class="ticker-container">
+        <div class="ticker-text">
+            INTEGRATIONS HUB: GH ACTIONS SYNCED • SLACK ALERTS ACTIVE • JIRA TICKETS: 12 OPEN • NEW CONNECTOR AVAILABLE:
+            DATADOG • SYSTEM HEALTH: OPTIMAL
+        </div>
+    </div>
+    <header>
+        <h1>Owl Security: Integrations</h1>
+        <button id="hamburger" class="hamburger" aria-label="Toggle Navigation"><i data-lucide="menu"></i></button>
+        <nav id="nav-menu">
+            <button id="theme-btn" class="theme-toggle"><i data-lucide="moon"></i> <span>Dark Mode</span></button>
+            <a href="index.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="report.html"><i data-lucide="shield-alert"></i> Report</a>
+            <a href="owasp.html"><i data-lucide="database"></i> OWASP</a>
+            <a href="graph.html"><i data-lucide="network"></i> Graph</a>
+            <a href="editor.html"><i data-lucide="edit-3"></i> Editor</a>
+            <a href="integrations.html" style="color: var(--accent-color);"><i data-lucide="puzzle"></i>
+                Integrations</a>
+        </nav>
+    </header>
+    <main class="animate-in">
+        <div class="marketplace-container">
+            <aside class="sidebar card">
+                <h3>Categories</h3>
+                <ul id="category-list">
+                    <li class="active" data-category="All">All <span class="count">8</span></li>
+                    <li data-category="API Security Scanners">API Security Scanners <span class="count">1</span></li>
+                    <li data-category="Ticketing & Messaging">Ticketing & Messaging <span class="count">4</span></li>
+                    <li data-category="Vulnerability Management">Vulnerability Management <span class="count">1</span>
+                    </li>
+                    <li data-category="CI/CD">CI/CD <span class="count">1</span></li>
+                    <li data-category="Security Logging">Security Logging <span class="count">1</span></li>
+                </ul>
+            </aside>
+
+            <section class="marketplace-content">
+                <div class="card search-card">
+                    <input type="text" id="int-search" placeholder="Search integrations..." class="search-box">
+                </div>
+
+                <div id="integrations-grid" class="integrations-grid">
+                    <!-- Cards will be injected here -->
+                </div>
+            </section>
+        </div>
+    </main>
+    <script src="js/showcase.js"></script>
+</body>
+
+</html>

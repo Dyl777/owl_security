@@ -1,0 +1,66 @@
+[
+    {
+        "id": "jira",
+        "name": "Jira",
+        "description": "Open and update tickets on security issues in your projects.",
+        "category": "Ticketing & Messaging",
+        "icon": "clipboard-check",
+        "status": "connected"
+    },
+    {
+        "id": "slack",
+        "name": "Slack",
+        "description": "Send security alerts to your channels using SlackBot.",
+        "category": "Ticketing & Messaging",
+        "icon": "message-square",
+        "status": "connected"
+    },
+    {
+        "id": "servicenow",
+        "name": "ServiceNow VR",
+        "description": "Import and automatically group vulnerability findings.",
+        "category": "Vulnerability Management",
+        "icon": "activity",
+        "status": "available"
+    },
+    {
+        "id": "azure-devops",
+        "name": "Azure DevOps",
+        "description": "Create a new Azure DevOps work item for detected risks.",
+        "category": "Ticketing & Messaging",
+        "icon": "cloud",
+        "status": "available"
+    },
+    {
+        "id": "zap",
+        "name": "OWASP ZAP",
+        "description": "Ingest scan results from Zap into your security dashboard.",
+        "category": "API Security Scanners",
+        "icon": "zap",
+        "status": "available"
+    },
+    {
+        "id": "github",
+        "name": "GitHub Actions",
+        "description": "Scan your CI/CD pipelines for secrets and vulnerabilities.",
+        "category": "CI/CD",
+        "icon": "github",
+        "status": "connected"
+    },
+    {
+        "id": "splunk",
+        "name": "Splunk",
+        "description": "Forward security logs and alerts to your Splunk instance.",
+        "category": "Security Logging",
+        "icon": "search",
+        "status": "available"
+    },
+    {
+        "id": "pagerduty",
+        "name": "PagerDuty",
+        "description": "Automate on-call scheduling for critical security incidents.",
+        "category": "Ticketing & Messaging",
+        "icon": "bell",
+        "status": "available"
+    }
+]
