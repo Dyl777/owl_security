@@ -68,21 +68,22 @@ function initEditor() {
             shape: 'custom',
             ctxRenderer: ({ ctx, id, x, y, state, label }) => {
                 const node = nodes.get(id);
+                if (!node) return { drawNode: () => { }, nodeDimensions: { width: 0, height: 0 } };
+
                 const currentShape = node.shape || 'roundedRect';
                 const currentIcon = node.icon || node.group;
-
-                window.nodeRenderer.drawNode(ctx, {
-                    x, y, state, label,
-                    group: node.group,
-                    shape: currentShape,
-                    icon: currentIcon,
-                    customColor: node.color
-                });
-
                 const dims = window.nodeRenderer.getDimensions(currentShape);
 
                 return {
-                    drawNode: () => { },
+                    drawNode: () => {
+                        window.nodeRenderer.drawNode(ctx, {
+                            x, y, state, label,
+                            group: node.group,
+                            shape: currentShape,
+                            icon: currentIcon,
+                            customColor: node.color
+                        });
+                    },
                     nodeDimensions: { width: dims.width, height: dims.height }
                 };
             }

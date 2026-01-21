@@ -189,8 +189,14 @@ const nodeRenderer = {
         };
         const dotColor = dotColors[currentIconKey] || dotColors[group] || '#6e7681';
 
-        const baseColor = customColor || (isDark ? '#1c2128' : '#ffffff');
-        const bgColor = baseColor;
+        // Background logic: Priority -> customColor -> subtle group color -> theme default
+        let bgColor = customColor || (isDark ? '#1c2128' : '#ffffff');
+        if (!customColor && dotColor) {
+            // If no custom color, use a faint tint of the group color
+            if (!isDark) bgColor = dotColor + '08'; // 5% opacity tint
+            else bgColor = dotColor + '15'; // Subtle dark theme tint
+        }
+
         const borderColor = isDark ? '#444c56' : '#e2e8f0';
         const textColor = isDark ? '#f0f6fc' : '#1f2328';
         const accentColor = '#ff6d5f';
@@ -204,7 +210,7 @@ const nodeRenderer = {
         ctx.lineWidth = state.selected ? 2.5 : 1.5; ctx.stroke();
 
         // Optional: Stripe for n8n style if no custom color
-        if (!customColor || customColor === '#ffffff' || customColor === '#1c2128') {
+        if (!customColor || customColor === '#ffffff' || customColor === '#1c2128' || bgColor.length > 7) {
             ctx.save();
             ctx.beginPath();
             if (currentShape === 'roundedRect') {
@@ -232,8 +238,9 @@ const nodeRenderer = {
         } else if (currentShape === 'andGate' || currentShape === 'orGate') {
             iconX = x - width / 4; textX = x + width / 8; textAlign = 'left';
         } else if (currentShape === 'rhombus' || currentShape === 'triangle') {
-            iconY = y + 8; textY = y + 30;
-            if (currentShape === 'triangle') { iconY = y + 15; textY = y + 35; }
+            // Triangle/Rhombus are bottom-heavy, shift icons down to hit visual center
+            iconY = y + 5; textY = y + 28;
+            if (currentShape === 'triangle') { iconY = y + 12; textY = y + 32; }
         } else if (currentShape === 'notGate') {
             iconX = x - 5; showText = false;
         }
