@@ -1,0 +1,8 @@
+{
+    "world": { "color": "#2ea043", "icon": "globe", "label": "Internet" },
+    "repo": { "color": "#8957e5", "icon": "github", "label": "Repository" },
+    "container": { "color": "#d29922", "icon": "box", "label": "Service" },
+    "secret": { "color": "#cf222e", "icon": "key", "label": "Secret" },
+    "db": { "color": "#0969da", "icon": "database", "label": "Database" },
+    "lb": { "color": "#6e7681", "icon": "layers", "label": "Load Balancer" }
+}

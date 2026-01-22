@@ -3,13 +3,13 @@ let nodes = new vis.DataSet([
     { id: 2, label: 'Cloud Load Balancer', group: 'lb', title: 'Entry point for cluster traffic' },
     { id: 3, label: 'Web Platform API', group: 'container', title: 'Critical runtime pod' },
     { id: 4, label: 'Postgres DB', group: 'db', title: 'Encrypted customer data storage' }
-]);
+]); //default
 
 let edges = new vis.DataSet([
     { from: 1, to: 2 },
     { from: 2, to: 3 },
     { from: 3, to: 4, label: 'read/write', dashes: true }
-]);
+]); //default
 
 let editorNetwork = null;
 let inspectorTarget = { type: null, id: null };
@@ -154,6 +154,8 @@ function initEditor() {
                     document.body.style.cursor = 'default';
                 }
             },
+
+
             editEdge: true,
             deleteNode: true,
             deleteEdge: true,
@@ -664,6 +666,36 @@ function updateShapePickerUI() {
     const label = document.getElementById('current-shape-label');
     label.innerText = shapeData.label;
 }
+
+function exportGraph() { //not tested yet
+  const data = {
+    nodes: nodes.get(),
+    edges: edges.get()
+  };
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "owl-graph.json";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+function importGraph(jsonText) { //not tested yet
+  const data = JSON.parse(jsonText);
+
+  nodes.clear();
+  edges.clear();
+
+  nodes.add(data.nodes);
+  edges.add(data.edges);
+
+  editorNetwork.fit();
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     initEditor();

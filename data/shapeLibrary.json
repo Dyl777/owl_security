@@ -1,0 +1,14 @@
+[
+    { "id": "roundedRect", "label": "Rounded Box", "category": "geometric" },
+    { "id": "rect", "label": "Rectangle", "category": "geometric" },
+    { "id": "square", "label": "Square", "category": "geometric" },
+    { "id": "circle", "label": "Circle", "category": "geometric" },
+    { "id": "rhombus", "label": "Rhombus", "category": "geometric" },
+    { "id": "triangle", "label": "Triangle", "category": "geometric" },
+    { "id": "hexagon", "label": "Hexagon", "category": "geometric" },
+    { "id": "semicircle", "label": "Semicircle", "category": "geometric" },
+    { "id": "puzzlePiece", "label": "Puzzle Piece", "category": "special" },
+    { "id": "andGate", "label": "AND Gate", "category": "logic" },
+    { "id": "orGate", "label": "OR Gate", "category": "logic" },
+    { "id": "notGate", "label": "NOT Gate", "category": "logic" }
+]

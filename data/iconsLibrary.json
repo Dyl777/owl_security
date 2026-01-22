@@ -1,0 +1,17 @@
+[
+    { "id": "shield", "label": "Shield", "category": "security" },
+    { "id": "lock", "label": "Lock", "category": "security" },
+    { "id": "cloud", "label": "Cloud", "category": "infrastructure" },
+    { "id": "database", "label": "Database", "category": "data" },
+    { "id": "server", "label": "Server", "category": "infrastructure" },
+    { "id": "user", "label": "User", "category": "identity" },
+    { "id": "globe", "label": "World", "category": "network" },
+    { "id": "box", "label": "Container", "category": "compute" },
+    { "id": "key", "label": "Key", "category": "security" },
+    { "id": "layers", "label": "Layers", "category": "infrastructure" },
+    { "id": "terminal", "label": "Terminal", "category": "compute" },
+    { "id": "wifi", "label": "Network", "category": "network" },
+    { "id": "activity", "label": "Activity", "category": "monitor" },
+    { "id": "alert-triangle", "label": "Warning", "category": "security" },
+    { "id": "zap", "label": "Trigger", "category": "action" }
+]
