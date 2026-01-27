@@ -392,6 +392,8 @@ document.getElementById('register-form')?.addEventListener('submit', (e) => {
 });
 
 function logout() {
+    localStorage.removeItem('loggedIn');
+
     alert('Logged out');
-    window.location.href = 'login.html';
+    window.location.href = '../landing.html';
 }
