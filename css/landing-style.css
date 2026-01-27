@@ -22,6 +22,7 @@
             animation: slideInDown 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+
         @keyframes slideInDown {
             from {
                 transform: translateY(-100%);
@@ -82,6 +83,8 @@
             flex-shrink: 0;
         }
 
+       
+
         .landing-header h1:hover {
             transform: scale(1.02);
             text-shadow: 0 2px 8px rgba(3, 102, 214, 0.3);
@@ -92,7 +95,8 @@
             margin-right: 8px;
             font-size: 20px;
             vertical-align: middle;
-        }
+        } 
+        
 
         .hamburger {
             display: none;
@@ -245,6 +249,43 @@
             box-shadow: 0 6px 16px rgba(3, 102, 214, 0.4);
         }
 
+        .register , .login{
+            position: absolute;
+            inset: 0;
+            display: none;
+            background: rgba(0,0,0,.5);
+        }
+
+
+       .btn-secondary:focus ~ .login, .btn-primary:focus ~.register, .register:hover, .login:hover {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .register-box, .login-box {
+            width: 900px;
+            height: 600px;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+         .register-box iframe, .login-box iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .close {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            text-decoration: none;
+            font-size: 22px;
+        }
+
         .btn-secondary {
             background: white;
             color: #0366d6;
@@ -266,7 +307,7 @@
 
         .hero-image {
             text-align: center;
-            position: relative;
+            /*position: relative;*/
         }
 
         .illustration {

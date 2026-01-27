@@ -18,7 +18,7 @@
             <nav id="nav-menu">
                 <a href="#features">Features</a>
                 <a href="#security">Security</a>
-                <a href="login.html">Login</a>
+                <a href="login.html" onclick="localStorage.setItem('loggedIn','yes')">Login</a>
                 <a href="register.html">Register</a>
             </nav>
         </div>
@@ -30,8 +30,15 @@
             <h1>Your System's Best Friend</h1>
             <p>Keep your system clean, secure, and running at peak performance. Monitor, analyze, and clean with intelligent automation.</p>
             <div class="hero-cta">
-                <a href="register.html" class="btn-primary">Get Started</a>
-                <a href="login.html" class="btn-secondary">Sign In</a>
+                
+                <a href="#register" class="btn-primary">Get Started</a>
+                <div id="register" class="register">
+                <div class="register-box">
+                <iframe src="register.html"></iframe>
+                <a href="#" class="close" onclick="location.hash=''">&times;</a>
+            </div>
+        </div>
+                <a href="login.html" class="btn-secondary" onclick="localStorage.setItem('loggedIn','yes')">Sign In</a>
             </div>
         </div>
         <div class="hero-image">
@@ -46,7 +53,9 @@
         <h2>Features</h2>
         <div class="feature-grid">
             <div class="feature-card">
-                <div class="feature-icon"><img id="error_img" src="./img/owl-with-a-whale (1).svg" alt="" style="max-width: 100%; height: auto;"></div>
+                <div class="feature-icon">
+                    <img id="error_img" src="./img/owl-with-a-whale (1).svg" alt="" style="max-width: 100%; height: auto;">
+                </div>
                 <div class="pd-tp-6">
                 <h3>Container Management</h3>
                 <p>Analyze and optimize your containers, remove unused images and reduce resource consumption.</p>
@@ -133,5 +142,12 @@
     </footer>
 
     <script src="js/script.js"></script>
+    <script>
+        
+        
+        if (localStorage.getItem("loggedIn")) {
+            window.location.href = ("index.html");
+        }
+    </script>
 </body>
 </html>
